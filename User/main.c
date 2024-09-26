@@ -29,6 +29,7 @@
 #include "./BSP/TOUCH/touch.h"
 #include "lvgl_demo.h"
 
+
 int main(void)
 {
     HAL_Init();                         /* 初始化HAL库 */
@@ -36,12 +37,12 @@ int main(void)
     delay_init(72);                     /* 延时初始化 */
     usart_init(115200);                 /* 串口初始化为115200 */
     led_init();                         /* 初始化LED */
-    lcd_init();                         /* 初始化LCD */
+    //lcd_init();                         /* 初始化LCD */
     key_init();                         /* 初始化按键 */
-    sram_init();                        /* SRAM初始化 */
-    tp_dev.init();                      /* 触摸屏初始化 */
+    //sram_init();                        /* SRAM初始化 */
+    //tp_dev.tp_init();                      /* 触摸屏初始化 */
     my_mem_init(SRAMIN);                /* 初始化内部SRAM内存池 */
-    my_mem_init(SRAMEX);                /* 初始化外部SRAM内存池 */
+    //my_mem_init(SRAMEX);                /* 初始化外部SRAM内存池 */
     
     lvgl_demo();                        /* 运行FreeRTOS例程 */
 }

@@ -53,13 +53,13 @@
  ***********************************************************************************/
 
 /* 0: 使用内置的 `lv_mem_alloc()` 和 `lv_mem_free()`*/
-#define LV_MEM_CUSTOM                       0
+#define LV_MEM_CUSTOM                       1
 #if LV_MEM_CUSTOM == 0
     /* `lv_mem_alloc()`可获得的内存大小(以字节为单位)(>= 2kB) */
-    #define LV_MEM_SIZE                     (200U * 1024U)          /*[字节]*/
+    #define LV_MEM_SIZE                     (20U * 1024U)          /*[字节]*/
 
     /* 为内存池设置一个地址，而不是将其作为普通数组分配。也可以在外部SRAM中。 */
-    #define LV_MEM_ADR                      0x68000000     /*0: 未使用*/
+    #define LV_MEM_ADR                      0 // (0x20000000 + (64 * 1024 - LV_MEM_SIZE))      /*0: 未使用*/
     /* 给内存分配器而不是地址，它将被调用来获得LVGL的内存池。例如my_malloc */
     #if LV_MEM_ADR == 0
         //#define LV_MEM_POOL_INCLUDE your_alloc_library  /* 如果使用外部分配器，取消注释 */
@@ -78,7 +78,7 @@
 #define LV_MEM_BUF_MAX_NUM                  16
 
 /* 使用标准的 `memcpy` 和 `memset` 代替LVGL自己的函数。(可能更快，也可能不会更快) */
-#define LV_MEMCPY_MEMSET_STD                0
+#define LV_MEMCPY_MEMSET_STD                1
 
 
 
@@ -207,7 +207,7 @@
  *-----------*/
 
 /* 启用日志模块 */
-#define LV_USE_LOG                          0
+#define LV_USE_LOG                          1
 #if LV_USE_LOG
 
     /*应该添加多重要的日志:
@@ -217,11 +217,11 @@
     *LV_LOG_LEVEL_ERROR       只有在系统可能出现故障时才会出现关键问题
     *LV_LOG_LEVEL_USER        仅用户自己添加的日志
     *LV_LOG_LEVEL_NONE        不要记录任何内容*/
-    #define LV_LOG_LEVEL LV_LOG_LEVEL_WARN
+    #define LV_LOG_LEVEL        LV_LOG_LEVEL_ERROR
 
     /*1: 使用'printf'打印日志;
      *0: 用户需要用' lv_log_register_print_cb() '注册回调函数 */
-    #define LV_LOG_PRINTF                   0
+    #define LV_LOG_PRINTF                   1
 
     /* 在产生大量日志的模块中启用/禁用LV_LOG_TRACE */
     #define LV_LOG_TRACE_MEM                1
@@ -345,19 +345,19 @@
  ***********************************************************************************/
 /* 蒙特塞拉特字体的ASCII范围和一些符号使用bpp = 4
  * https://fonts.google.com/specimen/Montserrat */
-#define LV_FONT_MONTSERRAT_8                0
+#define LV_FONT_MONTSERRAT_8                1
 #define LV_FONT_MONTSERRAT_10               1
 #define LV_FONT_MONTSERRAT_12               1
 #define LV_FONT_MONTSERRAT_14               1
-#define LV_FONT_MONTSERRAT_16               0
-#define LV_FONT_MONTSERRAT_18               0
+#define LV_FONT_MONTSERRAT_16               1
+#define LV_FONT_MONTSERRAT_18               1
 #define LV_FONT_MONTSERRAT_20               1
 #define LV_FONT_MONTSERRAT_22               1
 #define LV_FONT_MONTSERRAT_24               0
 #define LV_FONT_MONTSERRAT_26               0
 #define LV_FONT_MONTSERRAT_28               0
 #define LV_FONT_MONTSERRAT_30               0
-#define LV_FONT_MONTSERRAT_32               0
+#define LV_FONT_MONTSERRAT_32               1
 #define LV_FONT_MONTSERRAT_34               0
 #define LV_FONT_MONTSERRAT_36               0
 #define LV_FONT_MONTSERRAT_38               0
@@ -509,7 +509,7 @@
  *----------*/
 #define LV_USE_CALENDAR                     1
 #if LV_USE_CALENDAR
-    #define LV_CALENDAR_WEEK_STARTS_MONDAY  0
+    #define LV_CALENDAR_WEEK_STARTS_MONDAY  1
     #if LV_CALENDAR_WEEK_STARTS_MONDAY
         #define LV_CALENDAR_DEFAULT_DAY_NAMES {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"}
     #else

@@ -42,26 +42,32 @@
 //#define LCD_RST_GPIO_PIN                SYS_GPIO_PINx
 //#define LCD_RST_GPIO_CLK_ENABLE()       do{ __HAL_RCC_GPIOx_CLK_ENABLE(); }while(0)   /* 所在IO口时钟使能 */
 
-#define LCD_WR_GPIO_PORT                GPIOD
-#define LCD_WR_GPIO_PIN                 GPIO_PIN_5
-#define LCD_WR_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOD_CLK_ENABLE(); }while(0)   /* 所在IO口时钟使能 */
+#define LCD_WR_GPIO_PORT                GPIOC
+#define LCD_WR_GPIO_PIN                 GPIO_PIN_6
+#define LCD_WR_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)   /* 所在IO口时钟使能 */
 
-#define LCD_RD_GPIO_PORT                GPIOD
-#define LCD_RD_GPIO_PIN                 GPIO_PIN_4
-#define LCD_RD_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOD_CLK_ENABLE(); }while(0)   /* 所在IO口时钟使能 */
+#define LCD_RD_GPIO_PORT                GPIOC
+#define LCD_RD_GPIO_PIN                 GPIO_PIN_5
+#define LCD_RD_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)   /* 所在IO口时钟使能 */
 
-#define LCD_BL_GPIO_PORT                GPIOB
-#define LCD_BL_GPIO_PIN                 GPIO_PIN_0
-#define LCD_BL_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)   /* 背光所在IO口时钟使能 */
+#define LCD_BL_GPIO_PORT                GPIOD
+#define LCD_BL_GPIO_PIN                 GPIO_PIN_2
+#define LCD_BL_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOD_CLK_ENABLE(); }while(0)   /* 背光所在IO口时钟使能 */
 
 /* LCD_CS(需要根据LCD_FSMC_NEX设置正确的IO口) 和 LCD_RS(需要根据LCD_FSMC_AX设置正确的IO口) 引脚 定义 */
-#define LCD_CS_GPIO_PORT                GPIOG
-#define LCD_CS_GPIO_PIN                 GPIO_PIN_12
-#define LCD_CS_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOG_CLK_ENABLE(); }while(0)   /* 所在IO口时钟使能 */
+#define LCD_CS_GPIO_PORT                GPIOC
+#define LCD_CS_GPIO_PIN                 GPIO_PIN_4
+#define LCD_CS_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)   /* 所在IO口时钟使能 */
+//命令/数据 选择引脚 DC
+#define LCD_RS_GPIO_PORT                GPIOC
+#define LCD_RS_GPIO_PIN                 GPIO_PIN_7
+#define LCD_RS_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)   /* 所在IO口时钟使能 */
 
-#define LCD_RS_GPIO_PORT                GPIOG
-#define LCD_RS_GPIO_PIN                 GPIO_PIN_0
-#define LCD_RS_GPIO_CLK_ENABLE()        do{ __HAL_RCC_GPIOG_CLK_ENABLE(); }while(0)   /* 所在IO口时钟使能 */
+
+#define LCD_DATA_GPIO_PORT                GPIOB
+//数据线输入输出
+#define DATAOUT(x) 	LCD_DATA_GPIO_PORT->ODR=x; //数据输出
+#define DATAIN     	LCD_DATA_GPIO_PORT->IDR;   //数据输入	
 
 /* FSMC相关参数 定义 
  * 注意: 我们默认是通过FSMC块1来连接LCD, 块1有4个片选: FSMC_NE1~4
@@ -99,8 +105,8 @@ extern uint32_t  g_back_color;      /* 背景颜色.默认为白色 */
 
 /* LCD背光控制 */
 #define LCD_BL(x)   do{ x ? \
-                      HAL_GPIO_WritePin(LCD_BL_GPIO_PORT, LCD_BL_GPIO_PIN, GPIO_PIN_SET) : \
-                      HAL_GPIO_WritePin(LCD_BL_GPIO_PORT, LCD_BL_GPIO_PIN, GPIO_PIN_RESET); \
+                      HAL_GPIO_WritePin(LCD_BL_GPIO_PORT, LCD_BL_GPIO_PIN, GPIO_PIN_RESET) : \
+                      HAL_GPIO_WritePin(LCD_BL_GPIO_PORT, LCD_BL_GPIO_PIN, GPIO_PIN_SET); \
                      }while(0)
 
 /* LCD地址结构体 */
@@ -151,7 +157,7 @@ typedef struct
 #define D2U_L2R         6           /* 从下到上,从左到右 */
 #define D2U_R2L         7           /* 从下到上,从右到左 */
 
-#define DFT_SCAN_DIR    L2R_U2D     /* 默认的扫描方向 */
+#define DFT_SCAN_DIR    D2U_L2R     /* 默认的扫描方向 */
 
 /* 常用画笔颜色 */
 #define WHITE           0xFFFF      /* 白色 */
@@ -179,17 +185,20 @@ typedef struct
 /* SSD1963相关配置参数(一般不用改) */
 
 /* LCD分辨率设置 */ 
-#define SSD_HOR_RESOLUTION      800     /* LCD水平分辨率 */ 
-#define SSD_VER_RESOLUTION      480     /* LCD垂直分辨率 */ 
+#define SSD_HOR_RESOLUTION      320     /* LCD水平分辨率 */ 
+#define SSD_VER_RESOLUTION      240     /* LCD垂直分辨率 */ 
+
+#define LCD_DISP_DIR_VERTICAL    1
+#define LCD_DISP_DIR_HORIZONTAL  0
 
 /* LCD驱动参数设置 */ 
 #define SSD_HOR_PULSE_WIDTH     1       /* 水平脉宽 */ 
-#define SSD_HOR_BACK_PORCH      46      /* 水平前廊 */ 
-#define SSD_HOR_FRONT_PORCH     210     /* 水平后廊 */ 
+#define SSD_HOR_BACK_PORCH      20      /* 水平前廊 */ 
+#define SSD_HOR_FRONT_PORCH     10     /* 水平后廊 */ 
 
 #define SSD_VER_PULSE_WIDTH     1       /* 垂直脉宽 */ 
-#define SSD_VER_BACK_PORCH      23      /* 垂直前廊 */ 
-#define SSD_VER_FRONT_PORCH     22      /* 垂直前廊 */ 
+#define SSD_VER_BACK_PORCH      2      /* 垂直前廊 */ 
+#define SSD_VER_FRONT_PORCH     4      /* 垂直前廊 */ 
 
 /* 如下几个参数，自动计算 */ 
 #define SSD_HT          (SSD_HOR_RESOLUTION + SSD_HOR_BACK_PORCH + SSD_HOR_FRONT_PORCH)
@@ -197,6 +206,11 @@ typedef struct
 #define SSD_VT          (SSD_VER_RESOLUTION + SSD_VER_BACK_PORCH + SSD_VER_FRONT_PORCH)
 #define SSD_VPS         (SSD_VER_BACK_PORCH)
    
+
+/******************************* 定义 ILI934 常用命令 ********************************/
+#define      CMD_SetCoordinateX		 		    0x2A	     //设置X坐标
+#define      CMD_SetCoordinateY		 		    0x2B	     //设置Y坐标
+#define      CMD_SetPixel		 		          0x2C	     //填充像素
 /******************************************************************************************/
 /* 函数申明 */
 

@@ -205,13 +205,15 @@ void lv_port_indev_init(void)
 static void touchpad_init(void)
 {
     /*Your code comes here*/
-    tp_dev.init();
+    tp_dev.tp_init();
     
     /* 电阻屏坐标矫正 */
-    if (key_scan(0) == KEY0_PRES)           /* KEY0按下,则执行校准程序 */
+    KeyPressedDurationMs(&g_key1);
+    delay_ms(100);
+    KeyPressedDurationMs(&g_key1);
+    if (g_key1.isPreesed) /* KEY0按下,则强调执行校准程序 */
     {
-        lcd_clear(WHITE);                   /* 清屏 */
-        tp_adjust();                        /* 屏幕校准 */
+        tp_adjust();                        /* 屏幕重新校准 */
         tp_save_adjust_data();
     }
 }
@@ -251,7 +253,7 @@ static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
 static bool touchpad_is_pressed(void)
 {
     /*Your code comes here*/
-    tp_dev.scan(0);
+    tp_dev.tp_scan(0);
 
     if (tp_dev.sta & TP_PRES_DOWN)
     {

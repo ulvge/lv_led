@@ -20,6 +20,21 @@ extern "C" {
 /*********************
  *      DEFINES
  *********************/
+// 提取年份
+#define CURRENT_YEAR (__DATE__[7] == ' ' ? (__DATE__[9] - '0') * 1 + 1900 : (__DATE__[7] - '0') * 1000 + (__DATE__[8] - '0') * 100 + (__DATE__[9] - '0') * 10 + (__DATE__[10] - '0'))
+#define CURRENT_MONTH (__DATE__[0] == 'J' && __DATE__[1] == 'a' ? 1  : \
+                       __DATE__[0] == 'F'                        ? 2  : \
+                       __DATE__[0] == 'M' && __DATE__[2] == 'r' ? 3  : \
+                       __DATE__[0] == 'A' && __DATE__[1] == 'p' ? 4  : \
+                       __DATE__[0] == 'M' && __DATE__[2] == 'y' ? 5  : \
+                       __DATE__[0] == 'J' && __DATE__[2] == 'n' ? 6  : \
+                       __DATE__[0] == 'J' && __DATE__[2] == 'l' ? 7  : \
+                       __DATE__[0] == 'A' && __DATE__[1] == 'u' ? 8  : \
+                       __DATE__[0] == 'S'                        ? 9  : \
+                       __DATE__[0] == 'O'                        ? 10 : \
+                       __DATE__[0] == 'N'                        ? 11 : 12)
+
+#define CURRENT_DAY   ((__DATE__[4] == ' ' ? 0 : (__DATE__[4] - '0')) * 10 + (__DATE__[5] - '0'))
 
 /**********************
  *      TYPEDEFS
@@ -79,7 +94,7 @@ void lv_calendar_set_today_date(lv_obj_t * obj, uint32_t year, uint32_t month, u
  * @param year          today's year
  * @param month         today's month [1..12]
  */
-void lv_calendar_set_showed_date(lv_obj_t * obj, uint32_t year, uint32_t month);
+void lv_calendar_set_showed_date(lv_obj_t *obj, lv_calendar_date_t *date);
 
 /**
  * Set the highlighted dates

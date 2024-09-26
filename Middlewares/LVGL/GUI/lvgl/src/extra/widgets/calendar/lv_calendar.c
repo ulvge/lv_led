@@ -106,14 +106,14 @@ void lv_calendar_set_highlighted_dates(lv_obj_t * obj, lv_calendar_date_t highli
     highlight_update(obj);
 }
 
-void lv_calendar_set_showed_date(lv_obj_t * obj, uint32_t year, uint32_t month)
+void lv_calendar_set_showed_date(lv_obj_t * obj, lv_calendar_date_t *date)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_calendar_t * calendar = (lv_calendar_t *)obj;
 
-    calendar->showed_date.year   = year;
-    calendar->showed_date.month  = month;
-    calendar->showed_date.day    = 1;
+    calendar->showed_date.year   = date->year;
+    calendar->showed_date.month  = date->month;
+    calendar->showed_date.day    = date->day;
 
     lv_calendar_date_t d;
     d.year = calendar->showed_date.year;
@@ -236,20 +236,19 @@ lv_res_t lv_calendar_get_pressed_date(const lv_obj_t * obj, lv_calendar_date_t *
 /**********************
  *  STATIC FUNCTIONS
  **********************/
-
 static void lv_calendar_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 {
     LV_UNUSED(class_p);
     lv_calendar_t * calendar = (lv_calendar_t *)obj;
 
     /*Initialize the allocated 'ext'*/
-    calendar->today.year  = 2020;
-    calendar->today.month = 1;
-    calendar->today.day   = 1;
+    calendar->today.year  = CURRENT_YEAR;
+    calendar->today.month = CURRENT_MONTH;
+    calendar->today.day   = CURRENT_DAY;
 
-    calendar->showed_date.year  = 2020;
-    calendar->showed_date.month = 1;
-    calendar->showed_date.day   = 1;
+    calendar->showed_date.year  = CURRENT_YEAR;
+    calendar->showed_date.month = CURRENT_MONTH;
+    calendar->showed_date.day   = CURRENT_DAY;
 
     calendar->highlighted_dates      = NULL;
     calendar->highlighted_dates_num  = 0;
@@ -282,7 +281,7 @@ static void lv_calendar_constructor(const lv_obj_class_t * class_p, lv_obj_t * o
     lv_obj_set_flex_flow(obj, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_grow(calendar->btnm, 1);
 
-    lv_calendar_set_showed_date(obj, calendar->showed_date.year, calendar->showed_date.month);
+    lv_calendar_set_showed_date(obj, &calendar->showed_date);
     lv_calendar_set_today_date(obj, calendar->today.year, calendar->today.month, calendar->today.day);
 
     lv_obj_add_flag(calendar->btnm, LV_OBJ_FLAG_EVENT_BUBBLE);
