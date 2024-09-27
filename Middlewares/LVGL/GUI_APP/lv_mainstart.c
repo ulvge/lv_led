@@ -30,6 +30,7 @@
 static const lv_font_t *font;                   /* 定义字体 */
 static lv_obj_t *obj;                           /* 基础对象 */
 
+#define LED_ID_2    2
 /**
  * @brief  LED事件回调
  * @param  *e ：事件相关参数的集合，它包含了该事件的所有数据
@@ -37,8 +38,15 @@ static lv_obj_t *obj;                           /* 基础对象 */
  */
 static void led_event_cb(lv_event_t* e)
 {
+    static uint8_t i = 0;
     lv_obj_t* led = lv_event_get_target(e);     /* 获取触发源 */
     lv_led_toggle(led);                         /* 翻转LED状态 */
+    
+    int id = (int)lv_obj_get_user_data(led);
+    if (id == LED_ID_2) {
+        lv_obj_set_style_bg_color(led, i == 0 ? lv_color_hex(0x00ff00) : lv_color_hex(0xefefef), 0); // 修改 圆里面，填充的颜色
+        i = !i;
+    }
 }
 
 /**
@@ -83,11 +91,17 @@ static void lv_example_led_1(void)
  */
 static void lv_example_led_2(void)
 {
+    static uint16_t border_width = 20;
     lv_obj_t* led = lv_led_create(obj);                                                     /* 创建LED */
     lv_obj_set_size(led, scr_act_height() /5 , scr_act_height() /5);                        /* 设置LED大小 */
     lv_obj_align(led, LV_ALIGN_CENTER, 0, -scr_act_height() /15);                           /* 设置LED位置 */
     lv_led_set_color(led, lv_color_hex(0xff0000));                                          /* 设置LED颜色 */
     lv_led_on(led);                                                                         /* 打开LED */
+    
+    lv_obj_set_style_shadow_width(led, border_width, 0);    //圆外面的阴影 宽度
+    //lv_obj_set_style_border_width(led, border_width, 0); // 圆里面的边框 从圆周到圆心的宽度
+    lv_obj_set_style_bg_color(led, lv_color_hex(0x00ff00), 0); // 圆里面，填充颜色
+    lv_obj_set_user_data(led, (void *)LED_ID_2);  // 设置自定义数据 相当于 LED 控件的ID
     lv_obj_add_event_cb(led, led_event_cb, LV_EVENT_CLICKED, NULL);                         /* 设置LED事件回调 */
 
     lv_obj_t *label = lv_label_create(lv_scr_act());                                        /* 创建LED功能标签 */
@@ -108,6 +122,7 @@ static void lv_example_led_3(void)
     lv_obj_align(led, LV_ALIGN_CENTER, scr_act_width() * 4/ 15, -scr_act_height() /15);     /* 设置LED位置 */
     lv_led_set_color(led, lv_color_hex(0x2fc827));                                          /* 设置LED颜色 */
     lv_led_off(led);                                                                        /* 关闭LED */
+    lv_obj_set_user_data(led, (void *)3);  // 设置自定义数据 相当于 LED 控件的ID
     lv_obj_add_event_cb(led, led_event_cb, LV_EVENT_CLICKED, NULL);                         /* 设置LED事件回调 */
 
     lv_obj_t *label = lv_label_create(lv_scr_act());                                        /* 创建LED功能标签 */
